@@ -1,33 +1,33 @@
+def sayihata(x):
+    try: int(x)
+    except ValueError: return False
+    else:
+        if int(x)<=0: return False
+        else: return True
 def liste_olustur():
     x=input("""
 Yapılacaklar listesine hoşgeldin!
 Bugün kaç tane görevin var?: """)
-    while x<='0':
-        x=input("Hm çok az o, tekrar dene: ")
-
+    while sayihata(x)==False:
+        x=input("Yanlış değer girdiniz, tekrar deneyin: ")
+        
     for i in range(int(x)):
         sira=i+1
         gorev=input(f"{sira}.Görevinizi yazın: ")
+        if gorev=="":
+            break
         yapilacaklar.append(gorev)
-    print("---GÖREVLER---")
-    sira=0
-    for gorevler in yapilacaklar:
-        sira+=1
-        print(f"{sira}.{gorevler}")
+    liste()
 def liste_gorev_isaretle():
     if len(yapilacaklar)<1:
             print("İlk başta bir liste oluşturmalısınız!")
     else:
-        sira=0
-        print("---GÖREVLER---")
-        for gorevler in yapilacaklar:
-            sira=sira+1
-            print(f"""{sira}.{gorevler}""")
-        x=int(input("Hangi görevi yaptın?: "))
-        while x>len(yapilacaklar):
-            x=int(input("Yanlış girdiniz tekrar deneyin: "))
-        yapilanlar.append(yapilacaklar[x-1]) 
-        yapilacaklar.remove(yapilacaklar[x-1])
+        liste()
+        x=input("Hangi görevi yaptın?: ")
+        while sayihata(x)==False or int(x)>len(yapilacaklar):
+            x=input("Yanlış girdiniz tekrar deneyin: ")
+        yapilanlar.append(yapilacaklar[int(x)-1]) 
+        yapilacaklar.remove(yapilacaklar[int(x)-1])
         sira=0
         print("---Kalan Görevler---")
         for gorevler in yapilacaklar:
@@ -38,47 +38,48 @@ def liste_gorev_isaretle():
         for gorevler in yapilanlar:
             sira=sira+1
             print(f"""{sira}.{gorevler} YAPILDI""")
-        if len(yapilacaklar)==0:
-            print("TEBRİKLER! Tüm görevlerini yaptın!1")
         input("Ana menüye dönmek için bir tuşa bas")
 def liste_gorev_ekle():
     if len(yapilacaklar)<1:
         print("İlk başta bir liste oluşturmalısınız!")
     else:
-        x=int(input("Listeye kaç görev eklemek istiyorsun?: "))
-        for i in range(x):
+        x=input("Listeye kaç görev eklemek istiyorsun?: ")
+        while sayihata(x)==False:
+            x=input("Yanlış sayı girdiniz, tekrar deneyin: ")
+        for i in range(int(x)):
             gorev=input("Görevinizi yazın: ")
+            if gorev=="":
+                break
             yapilacaklar.append(gorev)
-            sira=0
-        print("---YENİ LİSTE---")
-        for gorevler in yapilacaklar:
-            sira=sira+1
-            print(f"{sira}.{gorevler}")
+
+        liste()
         input("Ana menüye dönmek için bir tuşa bas")
 def liste_gorev_cikar():
         if len(yapilacaklar)<1:
             print("İlk başta bir liste oluşturmalısınız!")
         else:          
-            x=int(input("Kaç tane görev çıkarmak istiyorsunuz?: "))
-            while x>len(yapilacaklar) or x<=0:
-                x=int(input("Yanlış girdiniz tekrar deneyin: "))
-            for i in range(x):
-                sira=0
-                print("---Kalan Görevler---")
-                for gorevler in yapilacaklar:
-                    sira=sira+1
-                    print(f"{sira}.{gorevler}")
-                y=int(input("Çıkarmak istediğiniz görevin numarasını giriniz: "))
-                while y>len(yapilacaklar):
-                    y=int(input("Yanlış girdiniz tekrar deneyin: "))
-                yapilacaklar.remove(yapilacaklar[y-1])
-                sira=0
-                print("--YENİ LİSTE---")
-                for gorevler in yapilacaklar:
-                    sira=sira+1
-                    print(f"{sira}.{gorevler}")
+            x=input("Kaç tane görev çıkarmak istiyorsunuz?: ")
+            while sayihata(x)==False or int(x)>len(yapilacaklar):
+                x=input("Yanlış girdiniz tekrar deneyin: ")
+            for i in range(int(x)):
+                liste()
+                y=input("Çıkarmak istediğiniz görevin numarasını giriniz: ")
+                if y=="":
+                    break
+                while sayihata(y)==False or int(y)>len(yapilacaklar):
+                    y=input("Yanlış girdiniz tekrar deneyin: ")
+                yapilacaklar.remove(yapilacaklar[int(y)-1])
+                liste()
             input("Ana menüye dönmek için bir tuşa bas")
-
+def liste():
+    sira=0
+    print("--LİSTE---")
+    for gorevler in yapilacaklar:
+        sira=sira+1
+        print(f"{sira}.{gorevler}")
+    if len(yapilacaklar)<=0:
+        print("Tebrikler tüm görevleri yaptınız!")
+  
 yapilacaklar=[]
 yapilanlar=[]
 
