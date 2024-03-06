@@ -22,15 +22,22 @@ def sifrekontrol(girissifre,sifre): #Girilen şifre ile mevcut şifrenin aynı o
 def secimkontrol(secim): #Seçim menüsünü kontrol ediyor
     if secim!="1" and secim!="2" and secim!="3" and secim!="4":
         return False
-def hesapIslemleri():
-    kadi=input("Kullanıcı adı seçin!: ")
+def hesapOlustur():
+    global kadi
+    global sifre
+    kadi=input("Kullanıcı adı oluşturun!: ")
     while kadi_olusturmaKontrol(kadi)==False:
         kadi=input("Kullanıcı adınız tamamen harflerden oluşmalı ve 3 ile 15 karakter arasında olmalıdır! Yeniden deneyin \n: ")
+    if kadi=="hile": sicilSistemi()
     sifre=input("Şifre oluşturun: ")
     while sifre_olusturmaKontrol(sifre)==False:
         sifre=input("Şifreniz 8-20 karakter arasında olmalı, içinde rakam ve büyük harf içermelidir!\n: ")
 
     print("Kullanıcı adınız ve şifreniz başarıyla oluşturuldu!")
+    hesapIslemleri()
+def hesapIslemleri():
+    global kadi
+    global sifre
     while True:
         print("1.Giriş Yap \n2.Kullanıcı Adını Değiştir\n3.Şifreni Değiştir\n4.Çıkış Yap(Veriler Kaybolur)")
         secim=str(input("Seçim Yapınız(1/2/3/4): "))
@@ -41,7 +48,7 @@ def hesapIslemleri():
             while giriskadi!=kadi:
                 giriskadi=input("Kullanıcı adınızı yanlış girdiniz, tekrar girin!: ")
             girissifre=input("Şifrenizi girin!: ")
-            sifrekontrol(girissifre,sifre)
+
             if sifrekontrol(girissifre,sifre)==True:
                 sicilSistemi()
             break
@@ -63,7 +70,7 @@ def hesapIslemleri():
                 print("Yeni şifreniz başarıyla oluşturuldu!")
         elif secim=="4":
             break                
-def sicilSistemi():
+def sicilSistemieski():
     sicil=[]
     adlar=[]
     maaslar=[]
@@ -87,4 +94,106 @@ def sicilSistemi():
     print(f"İsim: {adlar[int(x)]}")
     print(f"Maaşı: {maaslar[int(x)]}")
     input()
-hesapIslemleri()
+def sicilSistemi():
+    global hsecim
+
+    sicilNo=[]
+    isimList=[]
+    maasList=[]
+
+    def sayiKontrol(sayi):
+        try: int(sayi)
+        except ValueError: return False
+        else: return True
+    
+
+    def sicilMenu():
+        global hsecim
+        print("\nSicil sistemine hoşgeldiniz! Yapmak istediğiniz işlemi seçiniz:\n1.Sicil Tablosu Ekle\n2.Varolan Tabloya Sicil Ekle\n3.Varolan Tablodaki Sicili Sil\n4.Sicillere Bak\n5.Hesap Ayarları")
+        hsecim=input("")
+        if hsecim=="1":
+            sicilOlustur()
+        elif hsecim=="2":
+            sicilEkle()
+        elif hsecim=="3":
+            sicilSil()
+        elif hsecim=="4":
+            sicilBak()
+        elif hsecim=="5":
+            hesapIslemleri()
+        else: 
+            while hsecim!="1" and hsecim!="2" and hsecim!="3" and hsecim!="4" and hsecim!="5":
+                hsecim=input("Yanlış seçtiniz! Tekrar deneyin (1/2/3/4)")
+    def sicilOlustur():
+        x=input("Kaç tane sicil ekleyeceksin?: ")
+        while sayiKontrol(x)==False or int(x)<=0:
+            x=input("Yanlış girdiniz: ")
+        for i in range(1,int(x)+1):
+            sira=i
+            sicil=input(f"{sira}. Kişinin Sicil No'sunu giriniz: ")
+            sicilNo.append(sicil.upper())
+            if sicil=="":break
+            
+            isim=input(f"{sira}. Kişinin ismini giriniz: ")
+            while sayiKontrol(isim)==True or len(isim)<3 or len(isim)>35:
+                isim=input("İsim rakam içeremez!, tekrar deneyin: ")
+            isimList.append(isim)
+            maas=input(f"{sira}. Kişinin maaşını giriniz: ")
+            while sayiKontrol(maas)==False or len(maas)<5:
+                maas=input(f"Maaş harf içeremez!, tekrar deneyin:")
+            maasList.append(maas)
+    def sicilEkle():
+        if len(sicilNo)<=0:
+            print("Önce bir liste oluşturmalısın!")
+        else:
+            x=input("Kaç tane sicil ekleyeceksin?: ")
+            while sayiKontrol(x)==False or int(x)<=0:
+                x=input("Geçerli Bir Sayı giriniz: ")
+            for i in range(1,int(x)+1):
+                sira=i
+                sicil=input(f"{sira}. Kişinin Sicil No'sunu giriniz: ")
+                sicilNo.append(sicil)
+                if sicil=="":break
+            
+                isim=input(f"{sira}. Kişinin ismini giriniz: ")
+                while sayiKontrol(isim)==True or len(isim)<3 or len(isim)>35:
+                    isim=input("İsim rakam içeremez!, tekrar deneyin: ")
+                isimList.append(isim)
+                maas=input(f"{sira}. Kişinin maaşını giriniz: ")
+                while sayiKontrol(maas)==False or len(maas)<5:
+                    maas=input(f"Maaş harf içeremez ve 5 harften uzun olmalıdır!, tekrar deneyin:")
+                maasList.append(maas)
+    def sicilSil():
+        if len(sicilNo)<=0:print("Önce bir liste oluşturmalısın!")
+        else:
+            x=input("Kaç tane sicil sileceksin?: ")
+            while sayiKontrol==False or int(x)<=0 or int(x)>len(sicilNo):
+                x=input("Geçerli bir sayı giriniz!: ")
+            
+            for i in range(int(x)):
+                print(sicilNo)
+                secim=input("Silmek istediğiniz sicilNo'sunu girin: ")
+                while secim not in sicilNo:
+                    secim=input("Yanlış sicil girdiniz! Tekrar deneyin: ")
+                isecim=sicilNo.index(secim)
+                sicilNo.pop(isecim)
+                isimList.pop(isecim)
+                maasList.pop(isecim)
+    def sicilBak():
+        if len(sicilNo)<=0:print("Önce bir liste oluşturmalısın!: ")
+        else:
+            print("---SİCİL LİSTESİ---")
+            sira=len(sicilNo)
+            for sicil in sicilNo:
+                print(f"Sicil:{sicil} -")
+                print(f"İsim:{isimList[sira-1]}")
+                print(f"Maaş:{maasList[sira-1]}")
+                sira-=1
+                if sira==0:break
+                print("\n")
+            print("------------------")
+                
+    while True:     
+        sicilMenu()
+        if hsecim=="5":break
+hesapOlustur()
